@@ -6,9 +6,13 @@ const mongoose = require("mongoose")
 
 
 router.get("/", async (req, res) => {
-    const posts = await Post.find({}).populate("author", "name")
-    console.log(posts)
-    res.status(200).json(posts)
+    try {
+        const posts = await Post.find({}).populate("author", "name email")
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status.json({ error: error.message })
+    }
+
 })
 
 
@@ -17,6 +21,10 @@ router.post("/", requireAuth, async (req, res) => {
     const UserId = req.user._id
 
     try {
+        if (text.length <= 0) {
+            throw Error("Fill the Field")
+        }
+
         const post = await Post.newpost(UserId, text)
         res.status(200).json(post)
     } catch (error) {
@@ -36,7 +44,7 @@ router.delete("/:id", requireAuth, async (req, res) => {
         if (!UserId.equals(AuthorId)) { throw Error("You are not Authorized!") }
 
         await Post.findOneAndDelete(id)
-        res.status(200).json({ Message: "Post Deleted" })
+        res.status(200).json({ message: "Post Deleted" })
 
     } catch (error) {
         res.status(400).json({ error: error.message })
