@@ -7,7 +7,7 @@ const mongoose = require("mongoose")
 
 router.get("/", async (req, res) => {
     try {
-        const posts = await Post.find({}).populate("author", "name email")
+        const posts = await Post.find({}).populate("author", "name email").sort({ "createdAt": -1 })
         res.status(200).json(posts)
     } catch (error) {
         res.status.json({ error: error.message })
