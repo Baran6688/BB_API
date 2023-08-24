@@ -19,7 +19,8 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    favourites: [{ quote: { type: String }, author: { type: String }, date: { type: Date, default: Date.now() } }]
+    favourites: [{ quote: { type: String }, author: { type: String }, date: { type: Date, default: Date.now() } }],
+    posts: [{ type: Schema.Types.ObjectId, ref: "Post" }]
 
 }, { timestamps: true })
 

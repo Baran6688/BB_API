@@ -26,6 +26,9 @@ app.use((req, res, next) => {
 const UserRoutes = require("./routers/userRoutes")
 app.use("/api/user", UserRoutes)
 
+const PostRoutes = require("./routers/PostRoutes")
+app.use("/api/post", PostRoutes)
+
 
 
 
