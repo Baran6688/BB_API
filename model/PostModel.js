@@ -23,13 +23,22 @@ PostSchema.statics.newpost = async function (UserId, text) {
     return post
 }
 
+PostSchema.statics.findDelete = async function (postId, UserId) {
+    const post = await this.findByIdAndDelete(postId)
+    const AuthorId = post.author._id
 
 
-PostSchema.post("findOneAndDelete", async function (post) {
-    //Deleting the Post from User's Schema
-    const user = await User.findByIdAndUpdate(post.author._id, { $pull: { posts: post._id } })
+
+    if (!UserId.equals(AuthorId)) { throw Error("You are not Authorized!") }
+    const user = await User.findByIdAndUpdate(AuthorId, { $pull: { posts: postId } })
     await user.save()
-})
+
+
+}
+
+
+
+
 
 
 module.exports = Model("Post", PostSchema)

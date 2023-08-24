@@ -34,16 +34,10 @@ router.post("/", requireAuth, async (req, res) => {
 
 router.delete("/:id", requireAuth, async (req, res) => {
     const { id } = req.params
+    const UserId = req.user._id
     try {
         if (!mongoose.Types.ObjectId.isValid(id)) { throw Error("Post Does not Exist!") }
-
-        const post = await Post.findById(id)
-        const UserId = req.user._id
-        const AuthorId = post.author._id
-
-        if (!UserId.equals(AuthorId)) { throw Error("You are not Authorized!") }
-
-        await Post.findOneAndDelete(id)
+        const post = await Post.findDelete(id, UserId)
         res.status(200).json({ message: "Post Deleted" })
 
     } catch (error) {
