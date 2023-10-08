@@ -13,6 +13,12 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use((req, res, next) => {
+    const ipAddress = req.ip;
+    console.log(`User's IP address: ${ipAddress}`);
+    next();
+  });
+
 mongoose.connect(process.env.DB_URL)
     .then(() => {
         console.log("Connected to MongoDB Successfully")
