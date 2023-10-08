@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const mongoose = require('mongoose')
 require("dotenv").config()
+const axios = require("axios")
 
 
 
@@ -13,11 +14,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((req, res, next) => {
-    const ipAddress = req.ip;
-    console.log(`User's IP address: ${ipAddress}`);
+app.use(async(req,res,next)=> {
+    const response = await axios.get('https://api.ipify.org?format=json');
+    const userIP = response.data.ip;
+    req.userIP= userIP
     next();
-  });
+  })
 
 mongoose.connect(process.env.DB_URL)
     .then(() => {
