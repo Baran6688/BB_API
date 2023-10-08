@@ -17,7 +17,8 @@ app.use((req, res, next) => {
 app.use(async(req,res,next)=> {
     const response = await axios.get('https://api.ipify.org?format=json');
     const userIP = response.data.ip;
-    req.userIP= userIP
+    // req.userIP= userIP
+    console.log(userIP)
     next();
   })
 
